@@ -50,7 +50,7 @@ func (q *QRDiy) embgimg(rst, bgimg image.Image) {
 		return
 	}
 	qsx, qsy := 0, 0
-	//	br, bg, bb, ba := q.Arg.bgcolor.RGBA()
+	br, bg, bb, _ := q.Arg.bgcolor.RGBA()
 	fr, fg, fb, _ := q.Arg.forecolor.RGBA()
 	qex, qey := 0, 0
 	oks, oke := false, false
@@ -77,8 +77,12 @@ func (q *QRDiy) embgimg(rst, bgimg image.Image) {
 			if x < qsx || y < qsy || x > qex || y > qey {
 				rst.(*image.RGBA).Set(x, y, bgimg.At(x, y))
 			} else {
+				//				r, g, b, _ := rst.(*image.RGBA).At(x, y).RGBA()
+				//				if r == fr && g == fg && b == fb {
+				//					rst.(*image.RGBA).Set(x, y, bgimg.At(x, y))
+				//				}
 				r, g, b, _ := rst.(*image.RGBA).At(x, y).RGBA()
-				if r == fr && g == fg && b == fb {
+				if r == br && g == bg && b == bb {
 					rst.(*image.RGBA).Set(x, y, bgimg.At(x, y))
 				}
 			}

@@ -38,6 +38,7 @@ func (q *QRArg) Parse(query url.Values) {
 		} else {
 			q.size = q.bgimg.Bounds().Max.X
 		}
+		//		q.level = qrcode.Highest
 	}
 }
 
