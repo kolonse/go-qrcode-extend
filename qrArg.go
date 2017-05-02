@@ -4,7 +4,6 @@ import (
 	"image"
 	"image/color"
 	"net/http"
-	"net/url"
 	"strconv"
 
 	qrcode "github.com/kolonse/go-qrcode"
@@ -19,15 +18,21 @@ type QRArg struct {
 	logo      image.Image
 	level     qrcode.RecoveryLevel
 	bgimg     image.Image
+	bdmaxsize int
 }
 
-func (q *QRArg) Parse(query url.Values) {
+type Values interface {
+	Get(string) string
+}
+
+func (q *QRArg) Parse(query Values) {
 	q.Content = query.Get("content")
 	q.size = q.parseSize(query.Get("size"))
 	q.bgcolor = q.parseBGColor(query.Get("bgcolor"))
 	q.forecolor = q.parseForeColor(query.Get("forecolor"))
 	q.logo = q.parseLogo(query.Get("logo"))
 	q.bgimg = q.parseBGImg(query.Get("bgimg"))
+	q.bdmaxsize = q.parseBdmaxsize(query.Get("bdmaxsize"))
 	q.level = qrcode.Medium
 	if q.logo == nil {
 		q.level = qrcode.Highest
@@ -48,6 +53,18 @@ func (q *QRArg) parseSize(str string) int {
 		s, err := strconv.Atoi(str)
 		if err != nil {
 			size = 256
+		}
+		size = s
+	}
+	return size
+}
+
+func (q *QRArg) parseBdmaxsize(str string) int {
+	size := -1
+	if str != "" {
+		s, err := strconv.Atoi(str)
+		if err != nil {
+			size = -1
 		}
 		size = s
 	}

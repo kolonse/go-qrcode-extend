@@ -20,7 +20,13 @@ func (q *QRDiy) Encode() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	img := code.Image(q.Arg.size)
+	var img image.Image
+	if q.Arg.bdmaxsize <= 0 {
+		img = code.Image(q.Arg.size)
+	} else {
+		img = code.ImageWithBorderMaxSize(q.Arg.size, q.Arg.bdmaxsize)
+	}
+
 	if q.Arg.bgimg != nil {
 		q.embgimg(img, q.Arg.bgimg)
 	}
